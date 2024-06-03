@@ -1,16 +1,29 @@
-import { createBrowserRouter } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 import MainLayout from "./layout/MainLayout";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import { useSelector } from "react-redux";
 
 function App() {
+  const { user } = useSelector((state) => state.user);
+  console.log(user);
+  // const user = false;
   const routes = createBrowserRouter([
     {
       path: "/",
-      element: <MainLayout />,
+      element: (
+        <ProtectedRoutes user={user}>
+          <MainLayout />
+        </ProtectedRoutes>
+      ),
       children: [
         {
           index: true,
@@ -28,27 +41,15 @@ function App() {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: user ? <Navigate to="/" /> : <Login />,
     },
     {
       path: "/register",
-      element: <Register />,
+      element: user ? <Navigate to="/" /> : <Register />,
     },
   ]);
 
-  return (
-    <>
-      <h1 class="bg-red-800">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum magnam
-        soluta excepturi et nihil possimus.
-      </h1>
-      <input
-        type="text"
-        placeholder="Type here"
-        className="input input-bordered input-primary w-full max-w-xs"
-      />
-    </>
-  );
+  return <RouterProvider router={routes} />;
 }
 
 export default App;
