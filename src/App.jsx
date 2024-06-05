@@ -40,10 +40,6 @@ function App() {
       ],
     },
     {
-      path: "/login",
-      element: user ? <Navigate to="/" /> : <Login />,
-    },
-    {
       path: "/register",
       element: user ? <Navigate to="/" /> : <Register />,
     },
